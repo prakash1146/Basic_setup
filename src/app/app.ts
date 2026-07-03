@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AuthService } from './core/auth/auth.service';
 
 @Component({
   selector: 'adb-root',
   imports: [RouterOutlet],
-  template:`<router-outlet/>`
+  template: `<router-outlet/>`
 })
-export class App {}
+export class App {
+  constructor() {
+    inject(AuthService).init();
+  }
+}

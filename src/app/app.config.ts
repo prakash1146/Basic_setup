@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, inject, provideBrowserGlobalErrorListeners, provideAppInitializer } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -78,11 +78,41 @@ import {
   IconLayoutGrid,
   IconArrowsShuffle,
 } from '@tabler/icons-angular';
+import {
+  MSAL_GUARD_CONFIG,
+  MSAL_INSTANCE,
+  MSAL_INTERCEPTOR_CONFIG,
+  MsalBroadcastService,
+  MsalGuard,
+  MsalInterceptor,
+  MsalService,
+} from '@azure/msal-angular';
+import {
+  msalGuardConfigFactory,
+  msalInstanceFactory,
+  msalInterceptorConfigFactory,
+} from './core/auth/auth.config';
+import { provideHttpClient, withFetch, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { firstValueFrom } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideAnimationsAsync(),
+    provideHttpClient(withFetch(),withInterceptorsFromDi()),
     provideRouter(routes),
+    provideAppInitializer(() => {
+      const msalService = inject(MsalService);
+      return firstValueFrom(msalService.initialize());
+    }),
+    { provide: MSAL_INSTANCE, useFactory: msalInstanceFactory },
+    { provide: MSAL_GUARD_CONFIG, useFactory: msalGuardConfigFactory },
+    { provide: MSAL_INTERCEPTOR_CONFIG, useFactory: msalInterceptorConfigFactory },
+    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
+    MsalService,
+    MsalGuard,
+    MsalBroadcastService,
         provideTablerIcons({
       IconHome,
       IconDatabase,
