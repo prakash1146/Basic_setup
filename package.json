@@ -17,9 +17,9 @@
     "watch": "ng build --watch --configuration local",
     "watch:dev": "ng build --watch --configuration dev",
     "test": "ng test",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI",
-    "test:coverage": "ng test --watch=false --browsers=ChromeHeadlessCI --code-coverage",
-    "test:coverage:watch": "ng test --code-coverage"
+    "test:ci": "rimraf coverage && ng test --watch=false --browsers=ChromeHeadlessCI",
+    "test:coverage": "rimraf coverage && ng test --watch=false --browsers=ChromeHeadlessCI --code-coverage",
+    "test:coverage:watch": "rimraf coverage && ng test --code-coverage"
   },
   "private": true,
   "packageManager": "npm@11.15.0",
