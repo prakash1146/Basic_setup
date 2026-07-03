@@ -34,10 +34,6 @@ export const AUTH_CONFIG = {
 
 export type AppRole = (typeof AUTH_CONFIG.roles)[keyof typeof AUTH_CONFIG.roles];
 
-const isIE =
-  typeof navigator !== 'undefined' &&
-  (navigator.userAgent.indexOf('MSIE ') > -1 || navigator.userAgent.indexOf('Trident/') > -1);
-
 // Single shared instance. msal-browser v3+ requires the application to be
 // explicitly initialize()-d (and the redirect promise handled) BEFORE MsalGuard
 // runs — otherwise the guard fails with "unable to activate". We create the
@@ -53,11 +49,9 @@ export function msalInstanceFactory(): IPublicClientApplication {
       authority: `https://login.microsoftonline.com/${AUTH_CONFIG.tenantId}`,
       redirectUri: AUTH_CONFIG.redirectUri,
       postLogoutRedirectUri: AUTH_CONFIG.postLogoutRedirectUri,
-      navigateToLoginRequestUrl: true,
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
-      storeAuthStateInCookie: isIE,
     },
     system: {
       loggerOptions: {
