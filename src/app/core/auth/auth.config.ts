@@ -10,17 +10,19 @@ import {
   MsalInterceptorConfiguration,
 } from '@azure/msal-angular';
 
+import { environment } from '../../../environments/environment';
+
 /**
  * Entra ID (Azure AD) tenant + app registration values.
  * Override per environment by editing this file, or wire to an env loader later.
  */
 export const AUTH_CONFIG = {
-  clientId: 'acd3cd9f-1495-4bd7-bfa7-294f5b4194af',
-  tenantId: '9495d6bb-41c2-4c58-848f-92e52cf3d640',
-  redirectUri: typeof window !== 'undefined' ? window.location.origin : '/',
-  postLogoutRedirectUri: typeof window !== 'undefined' ? window.location.origin : '/',
-  apiScopes: ['User.Read'] as string[],
-  protectedApiBase: '/api',
+  clientId: environment.msal.clientId,
+  tenantId:  environment.msal.tenantId,
+  redirectUri:  environment.msal.redirectUri,
+  postLogoutRedirectUri:  environment.msal.postLogoutRedirectUri,
+  apiScopes:  environment.msal.apiScopes,
+  protectedApiBase:  environment.msal.protectedApiBase,
   // App-role identifiers — must match the "value" field of App Roles configured
   // on the Azure AD app registration. The ID token's `roles` claim ships these
   // automatically once a user is assigned (no extra scope required).
